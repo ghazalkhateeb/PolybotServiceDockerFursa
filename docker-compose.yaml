@@ -54,7 +54,6 @@ services:
       - "27019:27017"
     networks:
       - mongoCluster
-      -
 networks:
     mongoCluster:
         driver: bridge
