@@ -3,7 +3,9 @@ from loguru import logger
 import os
 import time
 from telebot.types import InputFile
-
+import requests
+import boto3
+from botocore.exceptions import NoCredentialsError
 
 class Bot:
 
@@ -73,5 +75,61 @@ class ObjectDetectionBot(Bot):
             photo_path = self.download_user_photo(msg)
 
             # TODO upload the photo to S3
+
+            chat_id = msg['chat']['id']
+            s3_client = boto3.client('s3')
+            bucket_name = os.environ['BUCKET_NAME']
+            image_name = os.path.basename(photo_path)
+
+            try:
+                s3_client.upload_file(photo_path, bucket_name, image_name)
+                logger.info(f'Image {image_name} uploaded to S3 bucket {bucket_name}.')
+                self.send_text(chat_id, "Image successfully uploaded to S3.")
+            except NoCredentialsError:
+                self.send_text(chat_id, "Error: AWS credentials not found.")
+                logger.error('AWS credentials not found.')
+                return
+            except Exception as e:
+                self.send_text(chat_id, f"Error uploading image to S3: {str(e)}")
+                logger.error(f'Error uploading image to S3: {str(e)}')
+                return
+
             # TODO send an HTTP request to the `yolo5` service for prediction
+
+            yolo_url = 'http://yolo5-microservice:8081/predict'
+
+            try:
+                response = requests.post(yolo_url, params={'imgName': image_name})
+                if response.status_code == 200:
+                    prediction_result = response.json()
+                    logger.info(f'YOLO prediction result: {prediction_result}')
+                else:
+                    self.send_text(chat_id, f"Error: YOLO service returned status code {response.status_code}")
+                    logger.error(f'Error: YOLO service returned status code {response.status_code}')
+                    return
+            except requests.exceptions.RequestException as e:
+                self.send_text(chat_id, f"Error communicating with YOLO service: {str(e)}")
+                logger.error(f'Error communicating with YOLO service: {str(e)}')
+                return
+
             # TODO send the returned results to the Telegram end-user
+            #The labels key is expected to contain a list of detected objects. If labels is present,
+            #it means that the YOLO service has successfully performed object detection and provided the results.
+            if 'labels' in prediction_result:
+                #The dictionary detected_objects will map each object class (e.g., person, dog) to the number of times it was detected in the image.
+                detected_objects = {}
+                for label in prediction_result['labels']:
+                    object_class = label['class']
+                    if object_class in detected_objects:
+                        detected_objects[object_class] += 1
+                    else:
+                        detected_objects[object_class] = 1
+                result_text = "Detected objects:\n"
+                for object_class, count in detected_objects.items():
+                    result_text += f"{object_class}: {count}\n"
+                self.send_text(chat_id, result_text)
+        else:
+            self.send_text(msg['chat']['id'], "Please send a photo.")
+
+
+
