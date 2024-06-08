@@ -27,7 +27,7 @@ services:
 
   mongo1:
     image: mongo:5
-    command: ["mongod", "--replSet", "myReplicaSet", "--bind_ip", "localhost,mongo1"]
+    command: ["mongod", "--replSet", "myReplicaSet", "--bind_ip_all", "localhost,mongo1"]
     container_name: mongo1
     restart: always
     ports:
@@ -37,7 +37,7 @@ services:
 
   mongo2:
     image: mongo:5
-    command: ["mongod", "--replSet", "myReplicaSet", "--bind_ip", "localhost,mongo2"]
+    command: ["mongod", "--replSet", "myReplicaSet", "--bind_ip_all", "localhost,mongo2"]
     container_name: mongo2
     restart: always
     ports:
@@ -47,7 +47,7 @@ services:
 
   mongo3:
     image: mongo:5
-    command: ["mongod", "--replSet", "myReplicaSet", "--bind_ip", "localhost,mongo3"]
+    command: ["mongod", "--replSet", "myReplicaSet", "--bind_ip_all", "localhost,mongo3"]
     container_name: mongo3
     restart: always
     ports:
