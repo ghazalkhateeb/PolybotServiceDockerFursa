@@ -60,6 +60,7 @@ jobs:
           host: ${{ env.BOT_INSTANCE_DOMAIN }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+
           source: docker-compose.yaml
           target: PolybotServiceDockerFursa/
 
