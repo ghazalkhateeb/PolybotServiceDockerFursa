@@ -51,7 +51,6 @@ class Bot:
             photo.write(data)
 
         return file_info.file_path
-
     def send_photo(self, chat_id, img_path):
         if not os.path.exists(img_path):
             raise RuntimeError("Image path doesn't exist")
