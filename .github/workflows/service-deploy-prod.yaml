@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  BOT_INSTANCE_DOMAIN: prod.mydomain.click  # TODO replace to your bot domain
+  BOT_INSTANCE_DOMAIN: predict-prod.ghazaldomain.click  # TODO replace to your bot domain
 
 jobs:
   PolybotBuild:
@@ -88,3 +88,5 @@ jobs:
             
             # Take it up with the current updated values
             docker compose up -d
+            sleep 20
+            
