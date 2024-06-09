@@ -88,6 +88,7 @@ jobs:
             BUCKET_NAME=${{ secrets.BUCKET_NAME }}
             """ > .env
             
+            
             # Take the service down
             sudo docker-compose down
             
