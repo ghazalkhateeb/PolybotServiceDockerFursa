@@ -14,7 +14,7 @@ services:
       - /home/ghazal/.aws/credentials:/root/.aws/credentials
 
   yolo:
-    image: ${YOLO_IMG_NAME}
+    image: ${YOLO5_IMG_NAME}
     container_name: yolo5-container
     ports:
       - "8081:8081"
