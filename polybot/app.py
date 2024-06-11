@@ -8,7 +8,6 @@ app = flask.Flask(__name__)
 TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
 TELEGRAM_APP_URL = os.environ['TELEGRAM_APP_URL']
 
-
 @app.route('/', methods=['GET'])
 def index():
     return 'Ok'
