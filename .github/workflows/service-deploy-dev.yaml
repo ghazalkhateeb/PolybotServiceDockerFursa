@@ -95,5 +95,5 @@ jobs:
             sudo docker-compose up -d
             sleep 20
             
-            /bin/bash /home/ubuntu/init_replica.sh
+            /bin/bash /home/ubuntu/PolybotServiceDockerFursa/init_replica.sh
 
