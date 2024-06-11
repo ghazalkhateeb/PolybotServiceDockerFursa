@@ -7,6 +7,7 @@ import requests
 import boto3
 from botocore.exceptions import NoCredentialsError
 
+
 class Bot:
 
     def __init__(self, token, telegram_chat_url):
@@ -17,9 +18,10 @@ class Bot:
         # remove any existing webhooks configured in Telegram servers
         self.telegram_bot_client.remove_webhook()
         time.sleep(0.5)
-
         # set the webhook URL
-        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60)
+        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/'
+                                                 f'{token}/', timeout=60,
+                                             certificate=open("my_cert.pem", "r"))
 
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
@@ -95,10 +97,12 @@ class ObjectDetectionBot(Bot):
 
             # TODO send an HTTP request to the `yolo5` service for prediction
 
-            yolo_url = 'http://yolo5-microservice:8081/predict'
+            #yolo_url = f"http://yolo5-container:8081/predict"
+            yolo_url = f"http://yolo5-container:8081/predict?imgName={image_name}"
 
             try:
-                response = requests.post(yolo_url, params={'imgName': image_name})
+                #response = requests.post(yolo_url, params={'imgName': image_name})
+                response = requests.post(yolo_url)
                 if response.status_code == 200:
                     prediction_result = response.json()
                     logger.info(f'YOLO prediction result: {prediction_result}')

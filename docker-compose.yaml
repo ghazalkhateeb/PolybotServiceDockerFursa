@@ -11,7 +11,7 @@ services:
     networks:
       - mongoCluster
     volumes:
-      - /home/ghazal/.aws/credentials:/root/.aws/credentials
+      - $HOME/.aws/credentials:/root/.aws/credentials
 
   yolo:
     image: ${YOLO5_IMG_NAME}
@@ -23,7 +23,7 @@ services:
     networks:
       - mongoCluster
     volumes:
-      - /home/ghazal/.aws/credentials:/root/.aws/credentials
+      - $HOME/.aws/credentials:/root/.aws/credentials
 
   mongo1:
     image: mongo:5
@@ -36,6 +36,7 @@ services:
       - mongoCluster
 
   mongo2:
+
     image: mongo:5
     command: ["mongod", "--replSet", "myReplicaSet", "--bind_ip", "localhost,mongo2"]
     container_name: mongo2

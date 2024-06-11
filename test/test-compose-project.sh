@@ -13,6 +13,7 @@ if [ "$RUNNING_CONTAINERS" -lt "5" ]; then
   exit 1
 fi
 
+
 echo -e "\n✅ Found at least 5 running containers"
 
 echo -e "\n\n\n-----------------------------------------------------------------------------------------------------------------"
