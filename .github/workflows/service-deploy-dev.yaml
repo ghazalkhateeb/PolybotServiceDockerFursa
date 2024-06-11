@@ -91,9 +91,10 @@ jobs:
             # Take the service down
             sudo docker-compose down
             
+            
             # Take it up with the current updated values
             sudo docker-compose up -d
             sleep 20
             
-            /bin/bash /home/ubuntu/init_replica.sh
+            /bin/bash /home/ubuntu/PolybotServiceDockerFursa/init_replica.sh
 
