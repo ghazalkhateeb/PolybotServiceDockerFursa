@@ -93,6 +93,7 @@ def predict():
             'predicted_img_path': str(predicted_img_path),
             'labels': labels,
             'time': time.time()
+
         }
 
         # TODO store the prediction_summary in MongoDB
